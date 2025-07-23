@@ -1,115 +1,103 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import SubHeading from "./components/SubHeading";
-import Footer from "./components/Footer";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import Input from "./components/Input";
+import { useState } from "react";
 import Button from "./components/Button";
-import InputBox from "./components/InputBox";
-import Heading from "./components/Heading";
+import { useNavigate } from "react-router-dom";
 
-const SignIn: React.FC = () => {
+const formSchema = z.object({
+    email: z.string().email("Invalid Email"),
+    password: z.string().min(4).max(20),
+});
+
+type FormType = z.infer<typeof formSchema>;
+
+const SignIn = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    // useEffect(() => {
-    //   async function redirect() {
-    //     try {
-    //       const token = localStorage.getItem("token");
-    //       if (!token) {
-    //         return;
-    //       }
-    //       const res = await axios.get(
-    //         (import.meta.env.VITE_BASE_URL as string) + "/api/v1/home",
-    //         {
-    //           headers: {
-    //             Authorization: `Bearer ${token}`,
-    //           },
-    //         }
-    //       );
-    //       toast.success(res.data.msg);
-    //       if (res.data.msg == "welcome") {
-    //         navigate("/");
-    //       }
-    //     } catch (error) {
-    //       localStorage.removeItem("token");
-    //       const err = error as AxiosError;
-    //       console.log(err.response?.data);
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   }
-    //   redirect();
-    // }, [navigate]);
-
-    type Schema = {
-        name: string;
-        email: string;
-        password: string;
-    };
-
-    const [value, setValue] = useState<Schema>({
-        name: "",
-        email: "",
-        password: "",
+    const { isLoading, setIsLoading } = useState<boolean>(false);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormType>({
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+        resolver: zodResolver(formSchema),
     });
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue({ ...value, [event.target.name]: event.target.value });
-    };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        // try {
-        //   const res = await axios.post(
-        //     (import.meta.env.VITE_BASE_URL as string) + "/api/v1/user/signin",
-        //     value
-        //   );
-        //   const token = res.data.token;
-        //   toast.success(res.data.msg);
-        //   localStorage.setItem("token", token);
-        //   navigate("/dashboard");
-        // } catch (error) {
-        //   const err = error as AxiosError;
-        //   const data = err.response?.data as { msg: string };
-        //   toast.error(data.msg);
-        // }
-    };
-    return loading ? (
-        <Loading />
-    ) : (
-        <div className="bg-slate-300 w-full min-h-screen flex justify-center items-center p-4">
-            <div className="rounded-lg bg-white max-w-md p-6 flex flex-col justify-center items-center">
-                <div className="text-center w-full">
-                    <Heading color="text-black" label={"Sign In"} />
-                    <SubHeading />
-                </div>
-                <form
-                    className="w-full space-y-4 mt-4"
-                    onSubmit={(event) => handleSubmit(event)}
-                >
-                    <InputBox
-                        name="email"
-                        label="Email"
-                        placeholder="John.Doe@gmail.com"
-                        type="text"
-                        onChange={handleChange}
-                    />
-                    <InputBox
-                        name="password"
-                        label="Password"
-                        placeholder="******"
-                        type="password"
-                        onChange={handleChange}
-                    />
-                    <Button
-                        bgColor="bg-blue-500"
-                        textColor="text-white"
-                        text="Sign In"
-                    />
-                </form>
-                <Footer
-                    msg="Don't have an account? "
-                    redirect="SignUp"
-                    onClick={() => navigate("/signup")}
+    const onSubmit = () => {};
+    return (
+        <div className="w-full flex min-h-full h-screen flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <img
+                    className="h-10 mx-auto w-auto"
+                    src="/images/logo.png"
+                    alt="logo"
                 />
+                <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                    Sign in to your account
+                </h2>
+            </div>
+
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-full">
+                <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10 m-auto w-100">
+                    <form
+                        className="space-y-6 flex flex-col"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <Input
+                            name="email"
+                            label="Email"
+                            id="email"
+                            type="email"
+                            register={register}
+                            errors={errors}
+                        />
+                        <Input
+                            label="Password"
+                            name="password"
+                            id="password"
+                            type="password"
+                            register={register}
+                            errors={errors}
+                            disabled={isLoading}
+                        />
+                        <div className="w-full flex justify-end">
+                            <Button
+                                type="submit"
+                                fullWidth={true}
+                                text="SignIn"
+                                disabled={isLoading}
+                                secondary={false}
+                                danger={false}
+                            />
+                        </div>
+                    </form>
+                    {/* <div className="mt-6"> */}
+                    {/*     <div className="relative"> */}
+                    {/*         <div className="absolute inset-0 flex items-center"> */}
+                    {/*             <div className="w-full border-t border-gray-300" /> */}
+                    {/*         </div> */}
+                    {/*         <div className="relative flex justify-center text-sm"> */}
+                    {/*             <span className="bg-white px-2 text-gray-500"> */}
+                    {/*                 or continue with */}
+                    {/*             </span> */}
+                    {/*         </div> */}
+                    {/*     </div> */}
+                    {/* </div> */}
+                    <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
+                        <div>{"Already have an account?"}</div>
+                        <div
+                            className="underline cursor-pointer"
+                            onClick={() => navigate("/signup")}
+                        >
+                            {"Sign Up"}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

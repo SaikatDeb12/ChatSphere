@@ -1,20 +1,45 @@
-import type React from "react";
+import clsx from "clsx";
 
-interface PropsType {
+interface ButtonProps {
+    type: "button" | "submit" | "reset" | undefined;
+    fullWidth?: boolean;
     text: string;
-    bgColor: string;
-    textColor: string;
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    // children?: React.ReactNode;
+    secondary?: boolean;
+    onClick?: () => void;
+    disabled?: boolean;
+    danger?: boolean;
 }
-const Button: React.FC<PropsType> = ({ text, bgColor, textColor, onClick }) => {
+
+const Button: React.FC<ButtonProps> = ({
+    type,
+    text,
+    fullWidth,
+    onClick,
+    disabled,
+    danger,
+    secondary,
+}) => {
     return (
-        <button
-            onClick={onClick}
-            type="submit"
-            className={`w-full ${bgColor} ${textColor} rounded-lg px-3 py-2 hover:shadow-sm shadow-md shadow-black ease-in-out font-semibold text-center text-sm cursor-pointer delay-75`}
-        >
-            {text}
-        </button>
+        <div className="w-full flex justify-end">
+            <button
+                className={clsx(
+                    "rounded-md px-3 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline2 focus-visible:outline-offset-2 cursor-pointer",
+                    fullWidth && "w-full",
+                    disabled && "opacity-50 cursor-default",
+                    danger &&
+                        "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
+                    secondary ? "text-gray-900" : "text-white",
+                    !secondary &&
+                        !danger &&
+                        "duration-150 bg-sky-500 hover:bg-sky-600 focus-visible:outline-sky-600",
+                )}
+                type={type}
+                onClick={() => onClick}
+            >
+                {text}
+            </button>
+        </div>
     );
 };
 
