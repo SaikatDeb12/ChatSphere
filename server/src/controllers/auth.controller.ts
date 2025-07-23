@@ -1,4 +1,6 @@
 import { z } from "zod";
+import dotenv from "dotenv";
+dotenv.config();
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { UserModel } from "../models/user";
@@ -33,7 +35,7 @@ const handleSignUp = async (req: Request, res: Response) => {
         const newUser = await UserModel.create({
             name: name,
             email: email,
-            password: hashedPassword,
+            hashedPassword: hashedPassword,
         });
 
         const token = jwt.sign(
@@ -42,7 +44,7 @@ const handleSignUp = async (req: Request, res: Response) => {
         );
         res.status(200).json({ token: token });
     } catch (err) {
-        console.log("Error: ", err);
+        console.log("Registration Error", err);
     }
 };
 
@@ -65,14 +67,15 @@ const handleSignIn = async (req: Request, res: Response) => {
 
         const { email, password } = data;
         const user = await UserModel.findOne({ email });
+        console.log(user);
         if (!user || !user.hashedPassword) {
-            res.status(401).json({ msg: "Invalid Credentials" });
+            res.status(401).json({ msg: "1Invalid Credentials" });
             return;
         }
 
         const validate = await bcrypt.compare(password, user.hashedPassword);
         if (!validate) {
-            res.status(401).json({ msg: "Invalid Credentials" });
+            res.status(401).json({ msg: "2Invalid Credentials" });
             return;
         }
 

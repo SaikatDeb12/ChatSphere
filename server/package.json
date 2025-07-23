@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "dev": "tsc -b && node dist/index.js"
+        "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\""
     },
     "keywords": [],
     "author": "",
@@ -20,7 +20,11 @@
         "express": "^5.1.0",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.16.4",
+        "nodemon": "^3.1.10",
         "typescript": "^5.8.3",
         "zod": "^4.0.5"
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.0"
     }
 }

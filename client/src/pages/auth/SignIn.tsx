@@ -30,20 +30,20 @@ const SignIn = () => {
 
     const onSubmit = () => {};
     return (
-        <div className="w-full flex min-h-full h-screen flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
+        <div className="w-full min-h-full flex h-screen flex-col justify-center items-center py-12 sm:px-6 lg:px-8 bg-gray-100">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <img
-                    className="h-10 mx-auto w-auto"
+                    className="h-7 sm:h-10 mx-auto w-auto"
                     src="/images/logo.png"
                     alt="logo"
                 />
-                <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                <h2 className="mt-6 text-xl text-center sm:text-3xl font-bold tracking-tight text-gray-900">
                     Sign in to your account
                 </h2>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-full">
-                <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10 m-auto w-100">
+                <div className="bg-white px-8 py-8 shadow sm:rounded-lg sm:px-10 m-auto max-w-100">
                     <form
                         className="space-y-6 flex flex-col"
                         onSubmit={handleSubmit(onSubmit)}
@@ -55,6 +55,7 @@ const SignIn = () => {
                             type="email"
                             register={register}
                             errors={errors}
+                            disabled={isLoading}
                         />
                         <Input
                             label="Password"
@@ -89,7 +90,7 @@ const SignIn = () => {
                     {/*     </div> */}
                     {/* </div> */}
                     <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-                        <div>{"Already have an account?"}</div>
+                        <div>{"New to ChatSphere?"}</div>
                         <div
                             className="underline cursor-pointer"
                             onClick={() => navigate("/signup")}
