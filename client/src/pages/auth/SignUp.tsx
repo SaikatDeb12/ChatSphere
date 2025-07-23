@@ -1,22 +1,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./components/Input";
 import { useState } from "react";
 import Button from "./components/Button";
 import { useNavigate } from "react-router-dom";
+import axiosIns from "@/lib/axios";
+import type { AxiosError } from "axios";
 
 const formSchema = z.object({
-    name: z.string().min(1, "Required"),
-    email: z.string().email("Invalid Email"),
-    password: z.string().min(4).max(20),
+    name: z.string().min(1, { message: "Required" }),
+    email: z.string().email({ message: "Invalid Email" }),
+    password: z
+        .string()
+        .min(4)
+        .max(20, { message: "Password should be at least 4 characters" }),
 });
 
 type FormType = z.infer<typeof formSchema>;
 
-const SignUp = () => {
+const SignIn = () => {
     const navigate = useNavigate();
-    const { isLoading, setIsLoading } = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const {
         register,
         handleSubmit,
@@ -30,12 +36,27 @@ const SignUp = () => {
         resolver: zodResolver(formSchema),
     });
 
-    const onSubmit = () => { };
+    const onSubmit = async (data: FormType) => {
+        console.log("Data submitted: ", data);
+        setIsLoading(true);
+        try {
+            const res = await axiosIns.post("/auth/signin", data);
+            console.log(res);
+            toast.success(res.data.msg);
+            localStorage.setItem("token", res.data.token);
+        } catch (error) {
+            const err = error as AxiosError;
+            const data = err.response?.data as { msg: string };
+            toast.error(data.msg);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     return (
-        <div className="w-full flex min-h-full h-screen flex-col justify-center items-center py-12 sm:px-6 lg:px-8 bg-gray-100">
+        <div className="w-full min-h-full flex h-screen flex-col justify-center items-center py-12 sm:px-6 lg:px-8 bg-gray-100">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <img
-                    className="h-10 sm:h-10 mx-auto w-auto"
+                    className="h-7 sm:h-10 mx-auto w-auto"
                     src="/images/logo.png"
                     alt="logo"
                 />
@@ -45,7 +66,7 @@ const SignUp = () => {
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-full">
-                <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10 m-auto max-w-100">
+                <div className="bg-white px-8 py-8 shadow sm:rounded-lg sm:px-10 m-auto max-w-100">
                     <form
                         className="space-y-6 flex flex-col"
                         onSubmit={handleSubmit(onSubmit)}
@@ -59,6 +80,7 @@ const SignUp = () => {
                             errors={errors}
                             disabled={isLoading}
                         />
+
                         <Input
                             name="email"
                             label="Email"
@@ -66,6 +88,7 @@ const SignUp = () => {
                             type="email"
                             register={register}
                             errors={errors}
+                            disabled={isLoading}
                         />
                         <Input
                             label="Password"
@@ -100,12 +123,12 @@ const SignUp = () => {
                     {/*     </div> */}
                     {/* </div> */}
                     <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-                        <div>{"Already have an account?"}</div>
+                        <div>{"New to ChatSphere?"}</div>
                         <div
                             className="underline cursor-pointer"
-                            onClick={() => navigate("/signin")}
+                            onClick={() => navigate("/signup")}
                         >
-                            {"Sign In"}
+                            {"Sign Up"}
                         </div>
                     </div>
                 </div>
@@ -114,4 +137,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default SignIn;

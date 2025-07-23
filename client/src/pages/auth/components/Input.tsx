@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface FormData {
-    name: string;
+    name?: string;
     email: string;
     password: string;
 }
@@ -46,6 +46,11 @@ const Input: React.FC<InputProps> = ({
                 autoComplete={id}
                 disabled={disabled}
             />
+            {errors[name]?.message && (
+                <p className="mt-1 text-sm text-red-500">
+                    {String(errors[name]?.message)}
+                </p>
+            )}
         </div>
     );
 };

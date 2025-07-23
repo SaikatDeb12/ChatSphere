@@ -1,21 +1,27 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./components/Input";
 import { useState } from "react";
 import Button from "./components/Button";
 import { useNavigate } from "react-router-dom";
+import axiosIns from "@/lib/axios";
+import type { AxiosError } from "axios";
 
 const formSchema = z.object({
-    email: z.string().email("Invalid Email"),
-    password: z.string().min(4).max(20),
+    email: z.string().email({ message: "Invalid Email" }),
+    password: z
+        .string()
+        .min(4)
+        .max(20, { message: "Password should be at least 4 characters" }),
 });
 
 type FormType = z.infer<typeof formSchema>;
 
 const SignIn = () => {
     const navigate = useNavigate();
-    const { isLoading, setIsLoading } = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const {
         register,
         handleSubmit,
@@ -28,7 +34,22 @@ const SignIn = () => {
         resolver: zodResolver(formSchema),
     });
 
-    const onSubmit = () => {};
+    const onSubmit = async (data: FormType) => {
+        console.log("Data submitted: ", data);
+        setIsLoading(true);
+        try {
+            const res = await axiosIns.post("/auth/signin", data);
+            console.log(res);
+            toast.success(res.data.msg);
+            localStorage.setItem("token", res.data.token);
+        } catch (error) {
+            const err = error as AxiosError;
+            const data = err.response?.data as { msg: string };
+            toast.error(data.msg);
+        } finally {
+            setIsLoading(false);
+        }
+    };
     return (
         <div className="w-full min-h-full flex h-screen flex-col justify-center items-center py-12 sm:px-6 lg:px-8 bg-gray-100">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">

@@ -69,13 +69,13 @@ const handleSignIn = async (req: Request, res: Response) => {
         const user = await UserModel.findOne({ email });
         console.log(user);
         if (!user || !user.hashedPassword) {
-            res.status(401).json({ msg: "1Invalid Credentials" });
+            res.status(401).json({ msg: "Invalid Credentials" });
             return;
         }
 
         const validate = await bcrypt.compare(password, user.hashedPassword);
         if (!validate) {
-            res.status(401).json({ msg: "2Invalid Credentials" });
+            res.status(401).json({ msg: "Invalid Credentials" });
             return;
         }
 
@@ -83,7 +83,7 @@ const handleSignIn = async (req: Request, res: Response) => {
             { userId: user._id },
             process.env.JWT_SECRET as string,
         );
-        res.status(200).json({ token: token });
+        res.status(200).json({ msg: "Login Successful", token: token });
     } catch (err) {
         res.status(500).json({ msg: "Internal Server Error" });
     }
