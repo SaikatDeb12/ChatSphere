@@ -1,1 +1,0 @@
-{"root":["./src/connectdb.ts","./src/index.ts","./src/controllers/auth.controller.ts","./src/middlewares/auth.middleware.ts","./src/models/account.ts","./src/models/conversation.ts","./src/models/message.ts","./src/models/user.ts","./src/routes/auth.route.ts"],"version":"5.8.3"}
