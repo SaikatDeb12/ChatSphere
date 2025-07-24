@@ -4,6 +4,7 @@ import type { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../auth/components/Loading";
+import LogOut from "../auth/LogOut";
 
 const HomePage = () => {
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
@@ -23,7 +24,7 @@ const HomePage = () => {
                     });
                     if (res.data.msg == "welcome") {
                         setIsAuthorized(true);
-                        navigate("/dashboard");
+                        // navigate("/dashboard");
                     }
                 }
             } catch (err) {
@@ -42,6 +43,7 @@ const HomePage = () => {
     ) : (
         <div>
             <p>Homepage</p>
+            {isAuthorized && <LogOut />}
         </div>
     );
 };
