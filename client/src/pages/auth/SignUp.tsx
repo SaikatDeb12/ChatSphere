@@ -3,11 +3,12 @@ import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./components/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./components/Button";
 import { useNavigate } from "react-router-dom";
-import axiosIns from "@/lib/axios";
+import axiosIns from "@/libs/axios";
 import type { AxiosError } from "axios";
+import Loading from "./components/Loading";
 
 const formSchema = z.object({
     name: z.string().min(1, { message: "Required" }),
@@ -36,6 +37,34 @@ const SignIn = () => {
         resolver: zodResolver(formSchema),
     });
 
+    useEffect(() => {
+        async function redirect() {
+            setIsLoading(true);
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+                else {
+                    const res = await axiosIns("/auth/home", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    if (res.data.msg == "welcome") {
+                        navigate("/dashboard");
+                    }
+                }
+            } catch (err) {
+                const error = err as AxiosError;
+                toast.error(error.message);
+                console.log(error.response?.data);
+                localStorage.removeItem("token");
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        redirect();
+    }, [navigate]);
+
     const onSubmit = async (data: FormType) => {
         console.log("Data submitted: ", data);
         setIsLoading(true);
@@ -52,7 +81,9 @@ const SignIn = () => {
             setIsLoading(false);
         }
     };
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <div className="w-full min-h-full flex h-screen flex-col justify-center items-center py-12 sm:px-6 lg:px-8 bg-gray-100">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <img

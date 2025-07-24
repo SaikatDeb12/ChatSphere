@@ -16,7 +16,8 @@ interface JWTPayload {
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const authHeader = req.header("Authorization");
+        const token = authHeader?.split(" ")[1];
         if (!token) {
             res.status(404).json({ msg: "Token not found" });
             return;
@@ -35,6 +36,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
         next();
     } catch (err) {
         console.log("Error: ", err);
+        res.status(401).json({ msg: "Token not valid" });
     }
 };
 
