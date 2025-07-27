@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../auth/components/Loading";
 import EmptySpace from "./components/EmptySpace";
 import Sidebar from "./components/Sidebar";
+import Sidebar2 from "./components/Sidebar2";
+import EmptySpace2 from "./components/EmptySpace2";
 
 const Conversations = () => {
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
@@ -44,8 +46,7 @@ const Conversations = () => {
     ) : (
         <div className="flex h-screen w-full bg-white">
             <div className="hidden lg:block lg:w-80 fixed inset-y-0 left-0 border-r border-gray-200">
-                //content of the sidebar will be different
-                <Sidebar />
+                <Sidebar2 />
             </div>
             <div className="flex-1 lg:ml-80">
                 <EmptySpace />

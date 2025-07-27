@@ -6,7 +6,7 @@ import { HiArrowLeftEndOnRectangle } from "react-icons/hi2";
 import { useNavigate, useLocation } from "react-router-dom";
 import ChatList from "./ChatList";
 
-const Sidebar: React.FC = () => {
+const Sidebar2: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -58,4 +58,4 @@ const Sidebar: React.FC = () => {
     );
 };
 
-export default Sidebar;
+export default Sidebar2;

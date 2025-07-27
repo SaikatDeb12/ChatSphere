@@ -1,6 +1,6 @@
 import { Types, Schema, model } from "mongoose";
 
-export interface conversationType extends Document {
+export interface ConversationType extends Document {
     name?: string;
     isGroup?: string;
     createdAt: Date;
@@ -9,7 +9,7 @@ export interface conversationType extends Document {
     userIds: Types.ObjectId[];
 }
 
-const conversationSchema = new Schema<conversationType>({
+const conversationSchema = new Schema<ConversationType>({
     name: { type: String },
     isGroup: { type: String },
     createdAt: { type: Date, default: Date.now() },
@@ -18,7 +18,7 @@ const conversationSchema = new Schema<conversationType>({
     userIds: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
-export const Conversation = model<conversationType>(
+export const Conversation = model<ConversationType>(
     "Conversation",
     conversationSchema,
 );

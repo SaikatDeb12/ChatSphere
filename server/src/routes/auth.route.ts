@@ -2,8 +2,12 @@ import express from "express";
 import { handleSignIn, handleSignUp } from "../controllers/auth.controller";
 import authMiddleware from "../middlewares/auth.middleware";
 import { handleProtectedRoute } from "../controllers/protectedRoute";
-export const router = express.Router();
+import getAllUsers from "../controllers/users.controller";
+export const authRouter = express.Router();
+export const chatRouter = express.Router();
 
-router.post("/signin", handleSignIn);
-router.post("/signup", handleSignUp);
-router.get("/home", authMiddleware, handleProtectedRoute);
+authRouter.post("/signin", handleSignIn);
+authRouter.post("/signup", handleSignUp);
+authRouter.get("/home", authMiddleware, handleProtectedRoute);
+
+authRouter.get("/bulk", authMiddleware, getAllUsers);

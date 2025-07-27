@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Loading from "../auth/components/Loading";
-import EmptySpace from "./components/EmptySpace";
 import Sidebar from "./components/Sidebar";
+import EmptySpace2 from "./components/EmptySpace2";
 
 const Users = () => {
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
@@ -47,7 +47,7 @@ const Users = () => {
                 <Sidebar />
             </div>
             <div className="flex-1 lg:ml-80">
-                <EmptySpace />
+                <EmptySpace2 />
             </div>
         </div>
     );

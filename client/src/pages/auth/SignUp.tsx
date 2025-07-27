@@ -51,7 +51,7 @@ const SignIn = () => {
                     });
                     if (res.data.msg == "welcome") {
                         navigate("/dashboard");
-                    }
+                    } else navigate("/home");
                 }
             } catch (err) {
                 const error = err as AxiosError;
@@ -69,10 +69,11 @@ const SignIn = () => {
         console.log("Data submitted: ", data);
         setIsLoading(true);
         try {
-            const res = await axiosIns.post("/auth/signin", data);
+            const res = await axiosIns.post("/auth/signup", data);
             console.log(res);
             toast.success(res.data.msg);
             localStorage.setItem("token", res.data.token);
+            navigate("/dashboard");
         } catch (error) {
             const err = error as AxiosError;
             const data = err.response?.data as { msg: string };
@@ -92,7 +93,7 @@ const SignIn = () => {
                     alt="logo"
                 />
                 <h2 className="mt-6 text-xl text-center sm:text-3xl font-bold tracking-tight text-gray-900">
-                    Sign in to your account
+                    Create a new account
                 </h2>
             </div>
 
@@ -134,7 +135,7 @@ const SignIn = () => {
                             <Button
                                 type="submit"
                                 fullWidth={true}
-                                text="SignIn"
+                                text="SignUp"
                                 disabled={isLoading}
                                 secondary={false}
                                 danger={false}
@@ -154,12 +155,12 @@ const SignIn = () => {
                     {/*     </div> */}
                     {/* </div> */}
                     <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-                        <div>{"New to ChatSphere?"}</div>
+                        <div>{"Already have an account?"}</div>
                         <div
                             className="underline cursor-pointer"
-                            onClick={() => navigate("/signup")}
+                            onClick={() => navigate("/signin")}
                         >
-                            {"Sign Up"}
+                            {"Sign In"}
                         </div>
                     </div>
                 </div>

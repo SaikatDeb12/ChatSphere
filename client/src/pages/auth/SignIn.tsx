@@ -40,6 +40,7 @@ const SignIn = () => {
             setIsLoading(true);
             try {
                 const token = localStorage.getItem("token");
+                console.log("Token from local: ", token);
                 if (!token) return;
                 else {
                     const res = await axiosIns("/auth/home", {
@@ -48,7 +49,7 @@ const SignIn = () => {
                         },
                     });
                     if (res.data.msg == "welcome") {
-                        navigate("/dashboard");
+                        navigate("/conversations");
                     }
                 }
             } catch (err) {
