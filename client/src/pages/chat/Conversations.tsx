@@ -5,14 +5,14 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Loading from "../auth/components/Loading";
 import EmptySpace from "./components/EmptySpace";
-import Sidebar from "./components/Sidebar";
 import Sidebar2 from "./components/Sidebar2";
-import EmptySpace2 from "./components/EmptySpace2";
 
 const Conversations = () => {
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [toggleChat, setToggleChat] = useState<boolean>(false); // Moved state here
     const navigate = useNavigate();
+
     useEffect(() => {
         async function redirect() {
             setIsLoading(true);
@@ -27,7 +27,6 @@ const Conversations = () => {
                     });
                     if (res.data.msg == "welcome") {
                         setIsAuthorized(true);
-                        // navigate("/dashboard");
                     }
                 }
             } catch (err) {
@@ -41,17 +40,28 @@ const Conversations = () => {
         }
         redirect();
     }, [navigate]);
+
+    // Callback to handle user click
+    const handleUserClick = () => {
+        setToggleChat(true);
+    };
+
     return isLoading ? (
         <Loading />
     ) : (
         <div className="flex h-screen w-full bg-white">
             <div className="hidden lg:block lg:w-80 fixed inset-y-0 left-0 border-r border-gray-200">
-                <Sidebar2 />
+                <Sidebar2 onUserClick={handleUserClick} /> {/* Pass callback */}
             </div>
             <div className="flex-1 lg:ml-80">
-                <EmptySpace />
+                <EmptySpace
+                    toggleChat={toggleChat}
+                    setToggleChat={setToggleChat}
+                />{" "}
+                {/* Pass state and setter */}
             </div>
         </div>
     );
 };
+
 export default Conversations;

@@ -23,7 +23,6 @@ function App() {
                         path="/conversations/:pid"
                         element={<DynamicConversation />}
                     />
-                    {/* <Route path="*" element={<SignIn />} /> */}
                 </Routes>
             </Router>
         </div>

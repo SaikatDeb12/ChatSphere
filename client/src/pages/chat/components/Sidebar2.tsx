@@ -6,7 +6,11 @@ import { HiArrowLeftEndOnRectangle } from "react-icons/hi2";
 import { useNavigate, useLocation } from "react-router-dom";
 import ChatList from "./ChatList";
 
-const Sidebar2: React.FC = () => {
+interface Sidebar2Props {
+    onUserClick: () => void; // Add prop for callback
+}
+
+const Sidebar2: React.FC<Sidebar2Props> = ({ onUserClick }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -52,7 +56,8 @@ const Sidebar2: React.FC = () => {
             </div>
 
             <div className="hidden lg:block fixed left-16 inset-y-0 w-64 border-r border-gray-200 bg-white z-30">
-                <ChatList />
+                <ChatList onUserClick={onUserClick} />{" "}
+                {/* Pass callback to ChatList */}
             </div>
         </div>
     );
